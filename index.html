@@ -3,40 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Valentine's Day!</title>
+    <title>My Love</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f8e1e1;
-            padding: 50px;
+        body { font-family: Arial, sans-serif; }
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #fff;
+            border: 1px solid #ccc;
+            position: relative;
+            margin: 2em auto;
+            animation: flap 2s infinite;
         }
-        .letter {
-            cursor: pointer;
-            display: inline-block;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #e74c3c;
-            border-radius: 8px;
-            background-color: #ffffff;
-            transition: transform 0.2s;
+        @keyframes flap {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(15deg); }
+            100% { transform: rotateX(0deg); }
         }
-        .letter:hover {
-            transform: scale(1.05);
-        }
-        .custom-message {
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
+        .message { display: none; margin-top: 1em; }
     </style>
 </head>
 <body>
-    <h1>Happy Valentine's Day!</h1>
-    <div class="letter" onclick="window.open('https://servimg.com/view/12345678', '_blank')">
-        <h2>Click the letter!</h2>
+    <div class="envelope" onclick="showMessage()">
+        <div class="content">Tap to open the envelope!</div>
     </div>
-    <div class="custom-message">
-        <textarea rows="4" cols="50" placeholder="Write your custom message here..."></textarea>
+    <div class="message" id="message">
+        <h2>Your Love Note</h2>
+        <p>This is a heartfelt message just for you!</p>
+        <img id="photo" alt="Love Photo" style="display:none;" />
     </div>
+
+    <script>
+        function showMessage() {
+            document.getElementById('message').style.display = 'block';
+            var img = document.getElementById('photo');
+            img.src = 'path/to/your/photo.jpg'; // replace with your photo path
+            img.onload = function() {
+                img.style.display = 'block';
+            };
+        }
+    </script>
 </body>
 </html>
