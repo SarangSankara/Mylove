@@ -3,44 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Love</title>
+    <title>Happy Valentine's Day ❤️</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .envelope {
-            width: 300px;
-            height: 200px;
-            background: #fff;
-            border: 1px solid #ccc;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
             position: relative;
-            margin: 2em auto;
-            animation: flap 2s infinite;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        @keyframes flap {
-            0% { transform: rotateX(0deg); }
-            50% { transform: rotateX(15deg); }
-            100% { transform: rotateX(0deg); }
+
+        /* Floating Hearts Background */
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 6s infinite ease-in-out;
         }
-        .message { display: none; margin-top: 1em; }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-30px) translateX(20px);
+                opacity: 0.6;
+            }
+        }
+
+        /* Main Envelope */
+        .envelope-container {
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .envelope {
+            width: 350px;
+            height: 220px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope.opened {
+            animation: openEnvelope 0.8s ease forwards;
+        }
+
+        @keyframes openEnvelope {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(25deg);
+            }
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: all 0.6s ease;
+        }
+
+        .envelope.opened .envelope-front {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #ff8fab 0%, #ff6b9d 100%);
+            top: 0;
+            border-radius: 10px 10px 0 0;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 20;
+            box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .envelope.opened .envelope-flap {
+            transform: rotateX(-180deg);
+        }
+
+        .letter-icon {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .envelope-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Message Content */
+        .message-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.4s;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .envelope.opened .message-container {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .message-content {
+            position: relative;
+            width: 350px;
+            max-height: 500px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .close-btn:hover {
+            background: #ff5580;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .message-title {
+            color: #ff6b9d;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .message-text {
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .photo-container {
+            width: 100%;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .photo-container img {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: zoomIn 0.6s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .hearts-decoration {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 15px 0;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeInOut 3s infinite;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .envelope.opened ~ .hint-text {
+            display: none;
+        }
+
+        /* Loading spinner */
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff6b9d;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader.show {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .envelope {
+                width: 280px;
+                height: 180px;
+            }
+
+            .message-content {
+                width: 280px;
+                padding: 20px;
+            }
+
+            .letter-icon {
+                font-size: 2.5rem;
+            }
+
+            .envelope-text {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="envelope" onclick="showMessage()">
-        <div class="content">Tap to open the envelope!</div>
-    </div>
-    <div class="message" id="message">
-        <h2>Your Love Note</h2>
-        <p>This is a heartfelt message just for you!</p>
-        <img id="photo" alt="Love Photo" style="display:none;" />
+    <div class="container">
+        <!-- Floating Hearts Background -->
+        <div id="hearts-background"></div>
+
+        <!-- Main Envelope -->
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-front">
+                    <div style="text-align: center;">
+                        <div class="letter-icon">💌</div>
+                        <div class="envelope-text">Open Me!</div>
+                    </div>
+                </div>
+                
+                <!-- Message Container -->
+                <div class="message-container">
+                    <div class="message-content">
+                        <button class="close-btn" onclick="closeMessage()">✕</button>
+                        <div class="message-title">A Letter For You</div>
+                        <div class="hearts-decoration">❤️ ❤️ ❤️</div>
+                        
+                        <div class="photo-container">
+                            <div class="loader" id="loader"></div>
+                            <img id="photo" alt="Special Photo" />
+                        </div>
+
+                        <div class="message-text" id="messageText">
+                            Every moment with you is a treasure. You make my heart beat faster and fill my life with joy and love.
+                        </div>
+
+                        <div class="hearts-decoration">💕 Forever Yours 💕</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hint-text">💫 Click the letter to open 💫</div>
     </div>
 
     <script>
-        function showMessage() {
-            document.getElementById('message').style.display = 'block';
-            var img = document.getElementById('photo');
-            img.src = 'path/to/your/photo.jpg'; // replace with your photo path
+        // EDIT THESE VARIABLES:
+        const PHOTO_URL = 'https://your-image-url-here.jpg'; // Replace with your servimg.com URL
+        const CUSTOM_MESSAGE = 'Every moment with you is a treasure. You make my heart beat faster and fill my life with joy and love.'; // Replace with your custom message
+
+        // Initialize
+        function initializeHearts() {
+            const container = document.getElementById('hearts-background');
+            const heartEmojis = ['❤️', '💕', '💖', '💗', '💝'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // Open Envelope
+        document.getElementById('envelope').addEventListener('click', function() {
+            if (!this.classList.contains('opened')) {
+                this.classList.add('opened');
+                loadPhoto();
+                updateMessage();
+            }
+        });
+
+        // Close Message
+        function closeMessage() {
+            document.getElementById('envelope').classList.remove('opened');
+        }
+
+        // Load Photo
+        function loadPhoto() {
+            const img = document.getElementById('photo');
+            const loader = document.getElementById('loader');
+            
+            loader.classList.add('show');
+            
             img.onload = function() {
-                img.style.display = 'block';
+                loader.classList.remove('show');
             };
+            
+            img.onerror = function() {
+                loader.classList.remove('show');
+                img.style.display = 'none';
+                console.error('Failed to load image. Please check your URL.');
+            };
+            
+            img.src = PHOTO_URL;
+        }
+
+        // Update Message
+        function updateMessage() {
+            document.getElementById('messageText').textContent = CUSTOM_MESSAGE;
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initializeHearts);
+
+        // Add some magic with particles on envelope click
+        document.getElementById('envelope').addEventListener('click', function(e) {
+            createConfetti(e.clientX, e.clientY);
+        });
+
+        function createConfetti(x, y) {
+            const colors = ['#ff6b9d', '#c44569', '#667eea', '#764ba2', '#ff8fab'];
+            for (let i = 0; i < 10; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = x + 'px';
+                confetti.style.top = y + 'px';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '9999';
+                document.body.appendChild(confetti);
+
+                const vx = (Math.random() - 0.5) * 8;
+                const vy = (Math.random() - 0.5) * 8;
+                let px = x;
+                let py = y;
+
+                const animate = () => {
+                    px += vx;
+                    py += vy;
+                    confetti.style.left = px + 'px';
+                    confetti.style.top = py + 'px';
+                    confetti.style.opacity = 1 - (py - y) / 200;
+
+                    if (confetti.style.opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        confetti.remove();
+                    }
+                };
+                animate();
+            }
         }
     </script>
 </body>
