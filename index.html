@@ -3,68 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Envelope</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
-        .envelope {
-            width: 200px;
-            height: 120px;
-            background-color: #fff;
-            border: 2px solid #ccc;
-            position: relative;
-            transform: perspective(600px) rotateX(0deg);
-            transition: transform 0.6s;
-            cursor: pointer;
-        }
-        .envelope.open {
-            transform: perspective(600px) rotateX(180deg);
-        }
-        .envelope::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ccc;
-            transform: rotateX(180deg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            color: white;
-            opacity: 0;
-            transition: opacity 0.6s;
-        }
-        .envelope.open::after {
-            opacity: 1;
-        }
-        .message {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .envelope.open + .message {
-            display: block;
-        }
-    </style>
+    <title>A Special Message</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="envelope" onclick="toggleEnvelope()"></div>
-    <div class="message">You’ve got a special message!</div>
-
-    <script>
-        function toggleEnvelope() {
-            const envelope = document.querySelector('.envelope');
-            envelope.classList.toggle('open');
-        }
-    </script>
+    <div class="container">
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <div class="letter">
+                    <div class="text">
+                        <img src="YOUR_IMAGE_LINK_HERE" alt="Special Moment" class="letter-img">
+                        <p>Your custom message goes here. Happy Valentine's Day!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="heart"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
+
