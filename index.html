@@ -3,120 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Message</title>
+    <title>A Special Surprise</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-white: rgba(255, 255, 255, 0.9);
+        }
+
         body {
-            background-color: #ffebee;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Georgia', serif;
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
         }
 
-        #container { text-align: center; position: relative; }
+        /* Glassmorphism Container */
+        .glass-card {
+            background: var(--soft-white);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
-        /* The Letter Styling */
-        .envelope {
-            width: 300px;
-            height: 200px;
-            background: #ff5252;
+        /* The Envelope */
+        #envelope {
+            font-size: 80px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #envelope:hover { transform: scale(1.2) rotate(5deg); }
+
+        /* Buttons */
+        .btn-container {
+            margin-top: 30px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            color: white;
-            cursor: pointer;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+            gap: 20px;
+            height: 60px;
         }
 
-        .envelope:hover { transform: scale(1.05); }
-
-        /* Question and Buttons */
-        #question-area { display: none; }
-        
-        .btn-group {
-            margin-top: 20px;
-            position: relative;
-            height: 50px;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
+        .btn {
+            padding: 12px 35px;
+            border-radius: 50px;
             border: none;
-            border-radius: 25px;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
 
-        #yesBtn { background-color: #4caf50; color: white; }
-        
+        #yesBtn {
+            background-color: var(--primary-pink);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
         #noBtn {
-            background-color: #f44336;
+            background-color: #6c757d;
             color: white;
             position: absolute;
-            left: 55%;
         }
 
-        /* The Final Pamphlet */
-        #pamphlet {
-            display: none;
-            background: white;
-            padding: 40px;
+        /* Final Pamphlet */
+        #pamphlet { display: none; }
+        #pamphlet img {
+            width: 100%;
             border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-            max-width: 400px;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary-pink);
         }
 
-        img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+        h1 { color: #800f2f; font-size: 1.5rem; }
     </style>
 </head>
 <body>
 
-    <div id="container">
-        <div id="envelope" class="envelope" onclick="openLetter()">
-            <h2>Open Me ❤️</h2>
+    <div class="glass-card">
+        <div id="step1">
+            <div id="envelope" onclick="nextStep(2)">✉️</div>
+            <p style="color: #c9184a; font-weight: bold;">You have a new message!</p>
         </div>
 
-        <div id="question-area">
-            <h1>Will you be my Valentine?</h1>
-            <div class="btn-group">
-                <button id="yesBtn" onclick="showPamphlet()">Yes</button>
-                <button id="noBtn" onmouseover="moveNo()">No</button>
+        <div id="step2" style="display: none;">
+            <h1>Will you be my Valentine? 🌹</h1>
+            <div class="btn-container">
+                <button id="yesBtn" class="btn" onclick="celebrate()">YES</button>
+                <button id="noBtn" class="btn" onmouseover="dodge()">NO</button>
             </div>
         </div>
 
-        <div id="pamphlet">
-            <img src="your-image-url-here.jpg" alt="Our Memory">
-            <h2>Yay! ❤️</h2>
-            <p id="customText">Insert your sweet words here later...</p>
+        <div id="step3" style="display: none;">
+            <div id="pamphlet">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHY5eGZ0dzR6Z2R6ZzZ6ZzZ6ZzZ6ZzZ6ZzZ6ZzZ6ZzZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/MDJ9F1LxUMsqG8jzWc/giphy.gif" alt="Happy Cat">
+                <h1 style="margin: 5px 0;">Yay! I knew it! ❤️</h1>
+                <p>Insert your personal message here. Tell her how much she means to you!</p>
+            </div>
         </div>
     </div>
 
     <script>
-        function openLetter() {
-            document.getElementById('envelope').style.display = 'none';
-            document.getElementById('question-area').style.display = 'block';
+        function nextStep(step) {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
         }
 
-        function moveNo() {
-            const noBtn = document.getElementById('noBtn');
-            // Move the "No" button to a random position within the window
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        function dodge() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
             
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
         }
 
-        function showPamphlet() {
-            document.getElementById('question-area').style.display = 'none';
-            document.getElementById('pamphlet').style.display = 'block';
+        function celebrate() {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+
+            // Launch Confetti!
+            var duration = 5 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff4d6d', '#ff758f', '#ffffff']
+              });
+              confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff4d6d', '#ff758f', '#ffffff']
+              });
+
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
+              }
+            }());
         }
     </script>
 </body>
