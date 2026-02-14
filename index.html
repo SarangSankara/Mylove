@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Surprise</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --primary-pink: #ff4d6d;
-            --soft-white: rgba(255, 255, 255, 0.9);
+            --soft-white: rgba(255, 255, 255, 0.95);
         }
 
         body {
@@ -23,7 +24,6 @@
             overflow: hidden; 
         }
 
-        /* Floating Hearts Background */
         .heart {
             position: absolute;
             color: rgba(255, 255, 255, 0.6);
@@ -31,7 +31,6 @@
             animation: float 6s linear infinite;
             top: 100vh;
             z-index: 0;
-            user-select: none;
         }
 
         @keyframes float {
@@ -39,7 +38,6 @@
             100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Glassmorphism Container */
         .glass-card {
             background: var(--soft-white);
             backdrop-filter: blur(10px);
@@ -54,6 +52,7 @@
             z-index: 10;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .scroll-area {
@@ -61,18 +60,132 @@
             padding-right: 5px;
         }
 
-        .scroll-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .scroll-area::-webkit-scrollbar-thumb {
-            background: var(--primary-pink);
-            border-radius: 10px;
-        }
+        .scroll-area::-webkit-scrollbar { width: 4px; }
+        .scroll-area::-webkit-scrollbar-thumb { background: var(--primary-pink); border-radius: 10px; }
 
         #envelope {
             font-size: 80px;
             cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s;
             display: inline-block;
         }
-        #envelope
+
+        .btn-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 100px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn { background-color: var(--primary-pink); color: white; }
+        #noBtn { background-color: #f8f9fa; color: #6c757d; position: absolute; }
+
+        #pamphlet img { width: 100%; border-radius: 15px; margin-bottom: 15px; border: 3px solid var(--primary-pink); }
+        h1 { color: #800f2f; font-size: 1.4rem; }
+        p { line-height: 1.6; color: #444; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+
+    <div id="youtube-audio"></div>
+
+    <div class="glass-card">
+        <div id="step1">
+            <div id="envelope" onclick="nextStep()">✉️</div>
+            <p style="color: #c9184a; font-weight: bold;">You have a new message!</p>
+        </div>
+
+        <div id="step2" style="display: none;">
+            <h1>Will you be my Valentine? 🌹</h1>
+            <div class="btn-container">
+                <button id="yesBtn" class="btn" onclick="celebrate()">YES</button>
+                <button id="noBtn" class="btn" onmouseover="dodge()">NO</button>
+            </div>
+        </div>
+
+        <div id="step3" class="scroll-area" style="display: none;">
+            <div id="pamphlet">
+                <img src="https://i.servimg.com/u/f93/19/44/64/05/img20210.jpg" alt="Our Memory">
+                <h1>Yay! I knew it! ❤️</h1>
+                <p>Hey babe!<br><br>
+                You are the best thing that happened to me. I love you so damn much.
+                One day we will achieve everything we ever wanted and will tell each other "we did it".<br><br>
+                May 10 is special for me. We finally decided not to contain our feelings anymore and expressed love.
+                We loved each other long before that, but it was solidified on May 10.<br><br>
+                I'm proud of you, I'm your biggest cheerleader!<br><br>
+                Let us promise continue this love till we shed our mortal form.
+                Uhm, actually - let's love beyond that as well.❤️</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Floating Hearts Background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
+        setInterval(createHeart, 400);
+
+        // 2. Navigation Logic
+        function nextStep() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        }
+
+        function dodge() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        // 3. YouTube API
+        var player;
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-audio', {
+                height: '0', width: '0',
+                videoId: 'b5Zay_Hd_7Q',
+                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': 'b5Zay_Hd_7Q' }
+            });
+        }
+
+        function celebrate() {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+
+            if (player && player.playVideo) { player.playVideo(); }
+
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ffffff']
+            });
+        }
+    </script>
+</body>
+</html>
