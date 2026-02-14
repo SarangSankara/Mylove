@@ -20,7 +20,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden;
+            overflow: hidden; /* Prevents background hearts from causing scrollbars */
         }
 
         /* Floating Hearts Background */
@@ -44,13 +44,31 @@
             background: var(--soft-white);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             text-align: center;
             max-width: 400px;
             width: 90%;
+            max-height: 85vh; /* Prevents card from going off-screen */
             border: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 10; /* Above the hearts */
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scrollable Area for the Message */
+        .scroll-area {
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Custom Scrollbar Styling */
+        .scroll-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: var(--primary-pink);
+            border-radius: 10px;
         }
 
         #envelope {
@@ -97,7 +115,7 @@
             z-index: 999;
         }
 
-        #pamphlet { display: none; }
+        #pamphlet { display: block; }
         #pamphlet img {
             width: 100%;
             border-radius: 15px;
@@ -105,8 +123,8 @@
             border: 3px solid var(--primary-pink);
         }
 
-        h1 { color: #800f2f; font-size: 1.5rem; }
-        p { line-height: 1.6; color: #444; }
+        h1 { color: #800f2f; font-size: 1.5rem; margin-bottom: 10px; }
+        p { line-height: 1.6; color: #444; margin-top: 0; }
     </style>
 </head>
 <body>
@@ -138,16 +156,16 @@
             </div>
         </div>
 
-        <div id="step3" style="display: none;">
-            <div id="pamphlet" style="display: block;">
+        <div id="step3" class="scroll-area" style="display: none;">
+            <div id="pamphlet">
                 <img src="https://i.servimg.com/u/f93/19/44/64/05/img20210.jpg" alt="Our Memory">
                 <h1 style="margin: 5px 0;">Yay! I knew it! ❤️</h1>
-                <p>Hey babe!<br>
+                <p>Hey babe!<br><br>
                 You are the best thing that happened to me. I love you so damn much.
-                One day we will achieve everything we ever wanted and will tell each other "we did it".
+                One day we will achieve everything we ever wanted and will tell each other "we did it".<br><br>
                 May 10 is special for me. We finally decided not to contain our feelings anymore and expressed love.
-                We loved each other long before that, but it was solidified on May 10.<br>
-                I'm proud of you, I'm your biggest cheerleader!
+                We loved each other long before that, but it was solidified on May 10.<br><br>
+                I'm proud of you, I'm your biggest cheerleader!<br><br>
                 Let us promise continue this love till we shed our mortal form.
                 Uhm, actually - let's love beyond that as well.❤️</p>
             </div>
@@ -162,13 +180,10 @@
 
         function dodge() {
             const btn = document.getElementById('noBtn');
-            
-            // Calculate limits so button stays within the browser window
             const padding = 20;
             const maxX = window.innerWidth - btn.offsetWidth - padding;
             const maxY = window.innerHeight - btn.offsetHeight - padding;
             
-            // Generate random coordinates within those safe limits
             const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
             const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
             
