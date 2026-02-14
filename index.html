@@ -20,7 +20,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Prevents background hearts from causing scrollbars */
+            overflow: hidden; 
         }
 
         /* Floating Hearts Background */
@@ -49,20 +49,18 @@
             text-align: center;
             max-width: 400px;
             width: 90%;
-            max-height: 85vh; /* Prevents card from going off-screen */
+            max-height: 85vh; 
             border: 1px solid rgba(255, 255, 255, 0.3);
             z-index: 10;
             display: flex;
             flex-direction: column;
         }
 
-        /* Scrollable Area for the Message */
         .scroll-area {
             overflow-y: auto;
             padding-right: 5px;
         }
 
-        /* Custom Scrollbar Styling */
         .scroll-area::-webkit-scrollbar {
             width: 4px;
         }
@@ -125,9 +123,14 @@
 
         h1 { color: #800f2f; font-size: 1.5rem; margin-bottom: 10px; }
         p { line-height: 1.6; color: #444; margin-top: 0; }
+
+        /* Hide the YouTube Player */
+        #youtube-audio { display: none; }
     </style>
 </head>
 <body>
+
+    <div id="youtube-audio"></div>
 
     <script>
         function createHeart() {
@@ -140,86 +143,26 @@
             setTimeout(() => { heart.remove(); }, 6000);
         }
         setInterval(createHeart, 400);
-    </script>
 
-    <div class="glass-card">
-        <div id="step1">
-            <div id="envelope" onclick="nextStep(2)">✉️</div>
-            <p style="color: #c9184a; font-weight: bold;">You have a new message!</p>
-        </div>
-
-        <div id="step2" style="display: none;">
-            <h1>Will you be my Valentine? 🌹</h1>
-            <div class="btn-container">
-                <button id="yesBtn" class="btn" onclick="celebrate()">YES</button>
-                <button id="noBtn" class="btn" onmouseover="dodge()">NO</button>
-            </div>
-        </div>
-
-        <div id="step3" class="scroll-area" style="display: none;">
-            <div id="pamphlet">
-                <img src="https://i.servimg.com/u/f93/19/44/64/05/img20210.jpg" alt="Our Memory">
-                <h1 style="margin: 5px 0;">Yay! I knew it! ❤️</h1>
-                <p>Hey babe!<br><br>
-                You are the best thing that happened to me. I love you so damn much.
-                One day we will achieve everything we ever wanted and will tell each other "we did it".<br><br>
-                May 10 is special for me. We finally decided not to contain our feelings anymore and expressed love.
-                We loved each other long before that, but it was solidified on May 10.<br><br>
-                I'm proud of you, I'm your biggest cheerleader!<br><br>
-                Let us promise continue this love till we shed our mortal form.
-                Uhm, actually - let's love beyond that as well.❤️</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function nextStep(step) {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
+        // YouTube IFrame API Logic
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-audio', {
+                height: '0',
+                width: '0',
+                videoId: 'b5Zay_Hd_7Q', // REPLACE WITH YOUR VIDEO ID
+                playerVars: {
+                    'autoplay': 0,
+                    'loop': 1,
+                    'playlist': 'b5Zay_Hd_7Q' // Required for looping
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
         }
-
-        function dodge() {
-            const btn = document.getElementById('noBtn');
-            const padding = 20;
-            const maxX = window.innerWidth - btn.offsetWidth - padding;
-            const maxY = window.innerHeight - btn.offsetHeight - padding;
-            
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-            
-            btn.style.position = 'fixed';
-            btn.style.left = randomX + 'px';
-            btn.style.top = randomY + 'px';
-        }
-
-        function celebrate() {
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'block';
-
-            var end = Date.now() + (5 * 1000);
-            var colors = ['#ff4d6d', '#ff758f', '#ffffff'];
-
-            (function frame() {
-              confetti({
-                particleCount: 4,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors
-              });
-              confetti({
-                particleCount: 4,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors
-              });
-
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
+        function onPlayerReady(event) {
+            // Player is ready but won't play until Yes is clicked
         }
     </script>
-</body>
-</html>
+    <script src="https://www.
