@@ -34,6 +34,7 @@
             max-width: 400px;
             width: 90%;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 1;
         }
 
         /* The Envelope */
@@ -44,22 +45,25 @@
         }
         #envelope:hover { transform: scale(1.2) rotate(5deg); }
 
-        /* Buttons */
+        /* Buttons as Bubbles */
         .btn-container {
             margin-top: 30px;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            height: 60px;
+            align-items: center;
+            gap: 40px; /* Separates the bubbles */
+            height: 80px;
         }
 
         .btn {
-            padding: 12px 35px;
-            border-radius: 50px;
+            padding: 15px 35px;
+            border-radius: 50px; /* Bubble shape */
             border: none;
             font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
         #yesBtn {
@@ -67,11 +71,14 @@
             color: white;
             box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
         }
+        
+        #yesBtn:hover { transform: scale(1.1); }
 
         #noBtn {
-            background-color: #6c757d;
-            color: white;
-            position: absolute;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            position: relative; /* Starts in place, then goes fixed in JS */
+            transition: all 0.1s ease-out;
         }
 
         /* Final Pamphlet */
@@ -103,7 +110,7 @@
         </div>
 
         <div id="step3" style="display: none;">
-            <div id="pamphlet">
+            <div id="pamphlet" style="display: block;">
                 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHY5eGZ0dzR6Z2R6ZzZ6ZzZ6ZzZ6ZzZ6ZzZ6ZzZ6ZzZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/MDJ9F1LxUMsqG8jzWc/giphy.gif" alt="Happy Cat">
                 <h1 style="margin: 5px 0;">Yay! I knew it! ❤️</h1>
                 <p>Insert your personal message here. Tell her how much she means to you!</p>
@@ -119,35 +126,41 @@
 
         function dodge() {
             const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
             
+            // Generate random positions
+            // Subtracting 100 to make sure the button doesn't go off the screen edge
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            
+            // Switch to fixed so it can jump anywhere on the screen
+            btn.style.position = 'fixed';
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
+            btn.style.zIndex = '999'; // Ensures it stays visible
         }
 
         function celebrate() {
             document.getElementById('step2').style.display = 'none';
             document.getElementById('step3').style.display = 'block';
 
-            // Launch Confetti!
-            var duration = 5 * 1000;
-            var end = Date.now() + duration;
+            // Custom Confetti Burst
+            var end = Date.now() + (5 * 1000);
+            var colors = ['#ff4d6d', '#ff758f', '#ffffff'];
 
             (function frame() {
               confetti({
-                particleCount: 3,
+                particleCount: 4,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#ff4d6d', '#ff758f', '#ffffff']
+                colors: colors
               });
               confetti({
-                particleCount: 3,
+                particleCount: 4,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#ff4d6d', '#ff758f', '#ffffff']
+                colors: colors
               });
 
               if (Date.now() < end) {
