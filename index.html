@@ -23,6 +23,22 @@
             overflow: hidden;
         }
 
+        /* Floating Hearts Background */
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 20px;
+            animation: float 6s linear infinite;
+            top: 100vh;
+            z-index: 0;
+            user-select: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
         /* Glassmorphism Container */
         .glass-card {
             background: var(--soft-white);
@@ -34,30 +50,29 @@
             max-width: 400px;
             width: 90%;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 1;
+            z-index: 10; /* Above the hearts */
         }
 
-        /* The Envelope */
         #envelope {
             font-size: 80px;
             cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
         }
         #envelope:hover { transform: scale(1.2) rotate(5deg); }
 
-        /* Buttons as Bubbles */
         .btn-container {
             margin-top: 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px; /* Separates the bubbles */
+            gap: 40px;
             height: 80px;
         }
 
         .btn {
             padding: 15px 35px;
-            border-radius: 50px; /* Bubble shape */
+            border-radius: 50px;
             border: none;
             font-weight: bold;
             font-size: 1.1rem;
@@ -77,11 +92,11 @@
         #noBtn {
             background-color: #f8f9fa;
             color: #6c757d;
-            position: relative; /* Starts in place, then goes fixed in JS */
-            transition: all 0.1s ease-out;
+            position: relative;
+            transition: left 0.1s ease, top 0.1s ease;
+            z-index: 999;
         }
 
-        /* Final Pamphlet */
         #pamphlet { display: none; }
         #pamphlet img {
             width: 100%;
@@ -91,9 +106,23 @@
         }
 
         h1 { color: #800f2f; font-size: 1.5rem; }
+        p { line-height: 1.6; color: #444; }
     </style>
 </head>
 <body>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
+        setInterval(createHeart, 400);
+    </script>
 
     <div class="glass-card">
         <div id="step1">
@@ -111,13 +140,13 @@
 
         <div id="step3" style="display: none;">
             <div id="pamphlet" style="display: block;">
-                <img src="https://i.servimg.com/u/f93/19/44/64/05/img20210.jpg" alt="Happy Cat">
+                <img src="https://i.servimg.com/u/f93/19/44/64/05/img20210.jpg" alt="Our Memory">
                 <h1 style="margin: 5px 0;">Yay! I knew it! ❤️</h1>
-                <p>Hey babe!
+                <p>Hey babe!<br>
                 You are the best thing that happened to me. I love you so damn much.
                 One day we will achieve everything we ever wanted and will tell each other "we did it".
                 May 10 is special for me. We finally decided not to contain our feelings anymore and expressed love.
-                We loved each other long before that, but it was solidified on May 10.
+                We loved each other long before that, but it was solidified on May 10.<br>
                 I'm proud of you, I'm your biggest cheerleader!
                 Let us promise continue this love till we shed our mortal form.
                 Uhm, actually - let's love beyond that as well.❤️</p>
@@ -134,23 +163,24 @@
         function dodge() {
             const btn = document.getElementById('noBtn');
             
-            // Generate random positions
-            // Subtracting 100 to make sure the button doesn't go off the screen edge
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 100);
+            // Calculate limits so button stays within the browser window
+            const padding = 20;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
             
-            // Switch to fixed so it can jump anywhere on the screen
+            // Generate random coordinates within those safe limits
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            
             btn.style.position = 'fixed';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
-            btn.style.zIndex = '999'; // Ensures it stays visible
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
         }
 
         function celebrate() {
             document.getElementById('step2').style.display = 'none';
             document.getElementById('step3').style.display = 'block';
 
-            // Custom Confetti Burst
             var end = Date.now() + (5 * 1000);
             var colors = ['#ff4d6d', '#ff758f', '#ffffff'];
 
