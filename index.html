@@ -4,23 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Message</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #ffebee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+        }
+
+        #container { text-align: center; position: relative; }
+
+        /* The Letter Styling */
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #ff5252;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .envelope:hover { transform: scale(1.05); }
+
+        /* Question and Buttons */
+        #question-area { display: none; }
+        
+        .btn-group {
+            margin-top: 20px;
+            position: relative;
+            height: 50px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #yesBtn { background-color: #4caf50; color: white; }
+        
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+            position: absolute;
+            left: 55%;
+        }
+
+        /* The Final Pamphlet */
+        #pamphlet {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+
+        img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="envelope-wrapper">
-            <div class="envelope">
-                <div class="letter">
-                    <div class="text">
-                        <img src="YOUR_IMAGE_LINK_HERE" alt="Special Moment" class="letter-img">
-                        <p>Your custom message goes here. Happy Valentine's Day!</p>
-                    </div>
-                </div>
+
+    <div id="container">
+        <div id="envelope" class="envelope" onclick="openLetter()">
+            <h2>Open Me ❤️</h2>
+        </div>
+
+        <div id="question-area">
+            <h1>Will you be my Valentine?</h1>
+            <div class="btn-group">
+                <button id="yesBtn" onclick="showPamphlet()">Yes</button>
+                <button id="noBtn" onmouseover="moveNo()">No</button>
             </div>
-            <div class="heart"></div>
+        </div>
+
+        <div id="pamphlet">
+            <img src="your-image-url-here.jpg" alt="Our Memory">
+            <h2>Yay! ❤️</h2>
+            <p id="customText">Insert your sweet words here later...</p>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        function openLetter() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('question-area').style.display = 'block';
+        }
+
+        function moveNo() {
+            const noBtn = document.getElementById('noBtn');
+            // Move the "No" button to a random position within the window
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        function showPamphlet() {
+            document.getElementById('question-area').style.display = 'none';
+            document.getElementById('pamphlet').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
-
